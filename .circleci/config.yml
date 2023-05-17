@@ -17,3 +17,30 @@ jobs:
           name: Install deps
           command: |
             pip install -r requirements.txt
+            
+workflows:
+  version: 2
+  test:
+    jobs:
+    - test: *context-to-use
+
+  release_candidate:
+    jobs:
+    - test:
+        <<: *context-to-use
+        filters:
+          tags:
+            only:
+            - /^[0-9]+.[0-9]+.[0-9]+rc[0-9]+$/
+          branches:
+            ignore: /.*/
+    - release_candidate:
+        <<: *context-to-use
+        requires:
+        - test
+        filters:
+          tags:
+            only:
+            - /^[0-9]+.[0-9]+.[0-9]+rc[0-9]+$/
+          branches:
+            ignore: /.*/            
