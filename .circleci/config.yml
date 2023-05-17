@@ -17,6 +17,26 @@ jobs:
           name: Install deps
           command: |
             pip install -r requirements.txt
+      - run:
+        name: Install tox
+        command: pip install --upgrade pip tox
+      - run:
+        name: "install requirements"
+        command: |
+          pip install -r requirements.txt -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt
+          pip install -r test-requirements.txt -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt
+      - run:
+        name: "flake8 run"
+        command: |
+          flake8
+      - run:
+        name: "run unit tests"
+        command: |
+          stestr run "^vaultlocker.tests.unit.*"
+      - run:
+        name: "run functional tests"
+        command: |
+          stestr run "^vaultlocker.tests.functional.*"
   release_candidate:
     docker:
     - <<: *objectrocket-docker-auth
