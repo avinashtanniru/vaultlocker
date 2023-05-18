@@ -19,12 +19,7 @@ jobs:
             pip install -r requirements.txt
       - run:
           name: Install tox
-          command: pip install --upgrade pip tox
-      - run:
-          name: "install requirements"
-          command: |
-            pip install -r requirements.txt -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt
-            pip install -r test-requirements.txt -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt
+          command: pip install --upgrade pip flake8
       - run:
           name: "flake8 run"
           command: |
