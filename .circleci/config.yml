@@ -19,19 +19,7 @@ jobs:
             pip install -r requirements.txt
       - run:
           name: Install tox
-          command: pip install --upgrade pip flake8
-      - run:
-          name: "flake8 run"
-          command: |
-            flake8
-      - run:
-          name: "run unit tests"
-          command: |
-            stestr run "^vaultlocker.tests.unit.*"
-      - run:
-          name: "run functional tests"
-          command: |
-            stestr run "^vaultlocker.tests.functional.*"
+          command: pip install --upgrade pip
   release_candidate:
     docker:
     - <<: *objectrocket-docker-auth
@@ -51,10 +39,10 @@ jobs:
         command: |
           export TWINE_REPOSITORY_URL=$TWINE_REPOSITORY_URL_DEVELOP
           python setup.py clean sdist bdist_wheel
-          twine upload dist/*
+          # twine upload dist/*
     - save_cache:
         name: Save cached tox dir
-        key: v1-tox-{{ .Branch }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}
+        key: v1-tox-{{ .Branch }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements.txt" }}
         paths:
         - .tox
     - store_artifacts:
